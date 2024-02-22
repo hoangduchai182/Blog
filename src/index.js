@@ -9,7 +9,14 @@ const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(morgan('combined'));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+); // urlencoded xử lý dữ liệu trong form nhập
+app.use(express.json());
+
+// app.use(morgan('combined'));
 
 app.engine(
   'hbs',
@@ -24,8 +31,20 @@ app.set('views', path.join(__dirname, 'resources/views'));
 app.get('/', (req, res) => {
   res.render('home');
 });
-app.get('/news', (req, res) => {
-  res.render('new');
+
+app.get('/news', (request, response) => {
+  // console.log(request.query.q);
+  response.render('news');
+});
+
+app.get('/search', (request, response) => {
+  response.render('search');
+});
+
+app.post('/search', (req, res) => {
+  console.log(req.body);
+
+  res.send('');
 });
 
 app.listen(port, () =>
